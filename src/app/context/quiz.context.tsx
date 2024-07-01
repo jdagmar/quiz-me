@@ -7,7 +7,7 @@ import React, {
   useContext,
   useState,
 } from 'react';
-import { Answer, CurrentQuestion, Quiz } from '../types';
+import { Answer, CurrentQuestion, Quiz } from '../types/quiz';
 
 type State = {
   quiz: Quiz;

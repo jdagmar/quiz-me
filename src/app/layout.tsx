@@ -4,6 +4,7 @@ import './globals.css';
 import { QuizContextProvider } from './context/quiz.context';
 import Header from './components/Header';
 import { SettingsContextProvider } from './context/settings.contex';
+import { AppContextProvider } from './context/app.context';
 
 const lato = Lato({
   subsets: ['latin'],
@@ -25,9 +26,11 @@ export default function RootLayout({
       <body className="text-slate-900 flex flex-col items-center justify-between p-24 w-4/5 max-w-5xl m-auto">
         <Header />
         <main className="w-full">
-          <QuizContextProvider>
-            <SettingsContextProvider>{children}</SettingsContextProvider>
-          </QuizContextProvider>
+          <AppContextProvider>
+            <QuizContextProvider>
+              <SettingsContextProvider>{children}</SettingsContextProvider>
+            </QuizContextProvider>
+          </AppContextProvider>
         </main>
       </body>
     </html>

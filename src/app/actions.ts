@@ -1,37 +1,67 @@
 'use server';
 
-import { ApiResponse, Quiz } from './types';
 import { v4 as uuidv4 } from 'uuid';
+import {
+  CategoryApiResponse,
+  CategoryResponse,
+  FetchError,
+  QuizApiResponse,
+  QuizResponse,
+} from './types/api';
 
-export const fetchQuiz = async (): Promise<Quiz> => {
-  // TODO: error handling
-  const res = await fetch(
-    'https://opentdb.com/api.php?amount=10&category=12&encode=url3986'
-  );
-  const data = await res.json();
+export const fetchQuiz = async (
+  categoryId: number
+): Promise<QuizResponse | FetchError> => {
+  try {
+    const res = await fetch(
+      `https://opentdb.com/api.php?amount=10&category=${categoryId}&encode=url3986`
+    );
+    const data = await res.json();
 
-  const results: ApiResponse[] = data.results;
+    const results: QuizApiResponse[] = data.results;
 
-  const items = results.map(question => {
-    const quizItemId = uuidv4();
+    const items = results.map(question => {
+      const quizItemId = uuidv4();
+
+      return {
+        id: quizItemId,
+        category: question.category,
+        question: decodeURIComponent(question.question),
+        answers: [question.correct_answer, ...question.incorrect_answers].map(
+          answer => ({
+            id: uuidv4(),
+            quizItemId,
+            answer: decodeURIComponent(answer),
+            isCorrect: answer === question.correct_answer,
+          })
+        ),
+      };
+    });
 
     return {
-      id: quizItemId,
-      category: question.category,
-      question: decodeURIComponent(question.question),
-      answers: [question.correct_answer, ...question.incorrect_answers].map(
-        answer => ({
-          id: uuidv4(),
-          quizItemId,
-          answer: decodeURIComponent(answer),
-          isCorrect: answer === question.correct_answer,
-        })
-      ),
+      type: 'SUCCESS',
+      quiz: {
+        length: items.length,
+        items,
+      },
     };
-  });
+  } catch {
+    return { type: 'QUIZ_FAIL' };
+  }
+};
 
-  return {
-    length: items.length,
-    items,
-  };
+export const fetchQuizCategories = async (): Promise<
+  CategoryResponse | FetchError
+> => {
+  try {
+    const res = await fetch('https://opentdb.com/api_category.php');
+    const data: CategoryApiResponse = await res.json();
+
+    return {
+      type: 'SUCCESS',
+      categories: data.trivia_categories,
+    };
+  } catch {
+    return { type: 'CATEGORY_FAIL' };
+  }
 };

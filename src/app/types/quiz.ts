@@ -1,12 +1,3 @@
-export type ApiResponse = {
-  category: string;
-  correct_answer: string;
-  difficulty: 'easy' | 'medium' | 'hard';
-  incorrect_answers: string[];
-  question: string;
-  type: 'multiple';
-};
-
 export type Quiz = {
   length: number;
   items: QuizItem[];
@@ -31,4 +22,9 @@ export type CurrentQuestion = {
   index: number;
   selected?: Answer;
   timer?: number;
+};
+
+export type Category = {
+  id: number;
+  name: string;
 };

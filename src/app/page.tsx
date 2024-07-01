@@ -1,12 +1,13 @@
 'use client';
 
 import { fetchQuiz } from './actions';
-import { Answer } from './types';
 import Button from './components/Button';
 import { useQuizContext } from './context/quiz.context';
 import { useRouter } from 'next/navigation';
 import { useSettingsContext } from './context/settings.contex';
 import Timer from './components/Timer';
+import { useAppContext } from './context/app.context';
+import { Answer } from './types/quiz';
 
 const Home = () => {
   const {
@@ -17,13 +18,23 @@ const Home = () => {
     answeredQuestions,
     setAnsweredQuestions,
   } = useQuizContext();
-  const { isTimed } = useSettingsContext();
+  const { isTimed, categoryId } = useSettingsContext();
+  const { error, setError } = useAppContext();
   const router = useRouter();
 
   const startQuiz = async () => {
-    const quiz = await fetchQuiz();
-    setQuiz(quiz);
-    setCurrentQuestion({ quizItemId: quiz.items[0].id, index: 0, timer: 30 });
+    const result = await fetchQuiz(categoryId);
+
+    if (result.type === 'SUCCESS') {
+      setQuiz(result.quiz);
+      setCurrentQuestion({
+        quizItemId: result.quiz.items[0].id,
+        index: 0,
+        timer: 30,
+      });
+    } else {
+      setError({ type: result.type });
+    }
   };
 
   const pickAnswer = (answer: Answer): void => {
