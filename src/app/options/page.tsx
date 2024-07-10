@@ -10,7 +10,7 @@ import { fetchQuizCategories } from '../actions';
 import { useAppContext } from '../context/app.context';
 import { Category } from '../types/quiz';
 
-const Settings = () => {
+const Options = () => {
   const { isTimed, setIsTimed, categoryId, setCategoryId } =
     useSettingsContext();
   const { error, setError } = useAppContext();
@@ -35,7 +35,7 @@ const Settings = () => {
 
   return (
     <>
-      <Heading text="Settings" type="h2" />
+      <Heading text="Options" type="h2" />
       <div className="flex items-center justify-between">
         <p className="mr-2">Time limit each question</p>
         <div className=" grid grid-cols-2 gap-2">
@@ -74,4 +74,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default Options;
