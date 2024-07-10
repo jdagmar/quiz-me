@@ -13,7 +13,6 @@ const lato = Lato({
 
 export const metadata: Metadata = {
   title: 'Quiz me',
-  description: 'Quiz app',
 };
 
 export default function RootLayout({
@@ -23,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={lato.className}>
-      <body className="text-slate-900 flex flex-col items-center justify-between p-24 w-4/5 max-w-5xl m-auto">
+      <body className="text-slate-900 flex flex-col items-center justify-between p-14 lg:p-24 lg:w-4/5 m-auto">
         <Header />
         <main className="w-full">
           <AppContextProvider>

@@ -11,7 +11,7 @@ const Select = ({ value, options, onChange }: Props) => {
     <select
       value={value}
       onChange={onChange}
-      className="bg-transparent border-2 border-sky-100 text-sky-800 text-sm rounded-md block w-full py-2 px-6 font-bold tracking-wide"
+      className="select bg-no-repeat appearance-none bg-transparent border-2 border-sky-100 text-sky-800 text-md rounded-md block w-full py-2 px-6 font-bold tracking-wide"
     >
       {options.map(option => (
         <option key={option.id} value={option.id}>

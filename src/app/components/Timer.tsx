@@ -1,7 +1,11 @@
 import { useEffect } from 'react';
 import { useQuizContext } from '../context/quiz.context';
 
-const Timer = () => {
+type Props = {
+  shouldClearTimer: boolean;
+};
+
+const Timer = ({ shouldClearTimer }: Props) => {
   const { currentQuestion, setCurrentQuestion } = useQuizContext();
 
   useEffect(() => {
@@ -14,17 +18,23 @@ const Timer = () => {
       }, 1000);
       return () => clearTimeout(timeout);
     }
-  }, [setCurrentQuestion, currentQuestion]);
+  }, [setCurrentQuestion, currentQuestion, shouldClearTimer]);
 
   return (
     <div className="bg-gray-200 rounded-md">
       <div
         key={currentQuestion.index}
         className={`${
-          currentQuestion.timer !== undefined && currentQuestion.timer === 0
+          !shouldClearTimer &&
+          currentQuestion.timer !== undefined &&
+          currentQuestion.timer === 0
             ? 'bg-red-700'
+            : shouldClearTimer
+            ? 'bg-gray-200'
             : 'bg-sky-800'
-        }  h-2.5 rounded-md animate-[empty_30s_linear_1s]`}
+        }  h-2.5 rounded-md ${
+          !shouldClearTimer ? 'animate-[empty_30s_linear_1s]' : ''
+        } `}
       ></div>
     </div>
   );

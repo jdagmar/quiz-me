@@ -32,6 +32,7 @@ const Home = () => {
         index: 0,
         timer: 30,
       });
+      setError(undefined);
     } else {
       setError({ type: result.type });
     }
@@ -69,7 +70,16 @@ const Home = () => {
 
   return (
     <>
-      {quiz.length === 0 ? (
+      {error?.type === 'QUIZ_FAIL' ? (
+        <div className="flex flex-col items-center">
+          <p className="mb-4">Something went wrong, try again later!</p>
+          <Button
+            text="Retry"
+            disabled={false}
+            onClick={() => startQuiz()}
+          ></Button>
+        </div>
+      ) : quiz.length === 0 ? (
         <div className="flex justify-center">
           <div className="grid grid-cols-2">
             <Button
@@ -82,7 +92,9 @@ const Home = () => {
         </div>
       ) : (
         <>
-          {isTimed && <Timer />}
+          {isTimed && (
+            <Timer shouldClearTimer={currentQuestion.selected !== undefined} />
+          )}
           <div className="bg-sky-100 p-8 text-2xl my-3 rounded-md text-center">
             <p>
               {quiz.length > 0 && quiz.items[currentQuestion.index].question}
@@ -102,7 +114,8 @@ const Home = () => {
                       : 'bg-orange-200 border-orange-200'
                   } 
                   ${
-                    (isTimed ? !isTimeUp : !currentQuestion.selected) &&
+                    ((isTimed && !isTimeUp && !currentQuestion.selected) ||
+                      !currentQuestion.selected) &&
                     'hover:bg-orange-300 hover:border-orange-300'
                   }
                   border-2 rounded-md px-2 py-3 w-full`}

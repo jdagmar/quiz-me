@@ -39,7 +39,7 @@ const Results = () => {
               <span
                 className={`${
                   isAnswerCorrect(item.id) ? 'text-green-700' : 'text-red-700'
-                } inline-block align-top`}
+                } inline-block align-top ml-1`}
               >
                 {isAnswerCorrect(item.id) ? <CheckIcon /> : <CloseIcon />}
               </span>
