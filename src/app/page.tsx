@@ -7,7 +7,8 @@ import { useRouter } from 'next/navigation';
 import { useSettingsContext } from './context/settings.contex';
 import Timer from './components/Timer';
 import { useAppContext } from './context/app.context';
-import { Answer } from './types/quiz';
+import { Answer as AnswerType } from './types/quiz';
+import Answer from './components/Answer';
 
 const Home = () => {
   const {
@@ -38,7 +39,7 @@ const Home = () => {
     }
   };
 
-  const pickAnswer = (answer: Answer): void => {
+  const pickAnswer = (answer: AnswerType): void => {
     setAnsweredQuestions([...answeredQuestions, answer]);
     setCurrentQuestion({ ...currentQuestion, selected: answer });
   };
@@ -87,7 +88,7 @@ const Home = () => {
               disabled={false}
               onClick={() => startQuiz()}
             ></Button>
-            <Button text="Settings" onClick={() => router.push('/settings')} />
+            <Button text="Options" onClick={() => router.push('/options')} />
           </div>
         </div>
       ) : (
@@ -103,27 +104,16 @@ const Home = () => {
           <ul className="grid grid-cols-2 gap-2 mb-6">
             {quiz.items[currentQuestion.index].answers.map(answer => (
               <li key={answer.answer}>
-                <button
-                  className={`${
-                    currentQuestion.selected?.id === answer.id &&
-                    answer.isCorrect
-                      ? 'border-green-700 bg-transparent'
-                      : currentQuestion.selected?.id === answer.id &&
-                        !answer.isCorrect
-                      ? 'border-red-700 bg-transparent'
-                      : 'bg-orange-200 border-orange-200'
-                  } 
-                  ${
-                    ((isTimed && !isTimeUp && !currentQuestion.selected) ||
-                      !currentQuestion.selected) &&
-                    'hover:bg-orange-300 hover:border-orange-300'
+                <Answer
+                  isSelected={currentQuestion.selected?.id === answer.id}
+                  answer={answer}
+                  isChoosable={
+                    (isTimed && !isTimeUp && !currentQuestion.selected) ||
+                    !currentQuestion.selected
                   }
-                  border-2 rounded-md px-2 py-3 w-full`}
                   onClick={() => pickAnswer(answer)}
-                  disabled={isQuestionFinished()}
-                >
-                  {answer.answer}
-                </button>
+                  answerIsChosen={isQuestionFinished()}
+                />
               </li>
             ))}
           </ul>
