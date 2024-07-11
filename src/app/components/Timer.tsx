@@ -10,13 +10,22 @@ const Timer = ({ shouldClearTimer }: Props) => {
 
   useEffect(() => {
     if (currentQuestion.timer && currentQuestion.timer > 0) {
-      const timeout = setTimeout(() => {
-        return setCurrentQuestion({
+      if (!shouldClearTimer) {
+        const timeout = setTimeout(() => {
+          return setCurrentQuestion({
+            ...currentQuestion,
+            timer: currentQuestion.timer
+              ? currentQuestion.timer - 1
+              : undefined,
+          });
+        }, 1000);
+        return () => clearTimeout(timeout);
+      } else {
+        setCurrentQuestion({
           ...currentQuestion,
-          timer: currentQuestion.timer ? currentQuestion.timer - 1 : undefined,
+          timer: undefined,
         });
-      }, 1000);
-      return () => clearTimeout(timeout);
+      }
     }
   }, [setCurrentQuestion, currentQuestion, shouldClearTimer]);
 
@@ -25,9 +34,7 @@ const Timer = ({ shouldClearTimer }: Props) => {
       <div
         key={currentQuestion.index}
         className={`${
-          !shouldClearTimer &&
-          currentQuestion.timer !== undefined &&
-          currentQuestion.timer === 0
+          currentQuestion.timer !== undefined && currentQuestion.timer === 0
             ? 'bg-red-700'
             : shouldClearTimer
             ? 'bg-gray-200'
