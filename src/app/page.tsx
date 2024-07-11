@@ -107,10 +107,6 @@ const Home = () => {
                 <Answer
                   isSelected={currentQuestion.selected?.id === answer.id}
                   answer={answer}
-                  isChoosable={
-                    (isTimed && !isTimeUp && !currentQuestion.selected) ||
-                    !currentQuestion.selected
-                  }
                   onClick={() => pickAnswer(answer)}
                   answerIsChosen={isQuestionFinished()}
                 />

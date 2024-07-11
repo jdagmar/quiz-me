@@ -5,30 +5,23 @@ import CloseIcon from './icons/CloseIcon';
 type Props = {
   isSelected: boolean;
   answer: AnswerType;
-  isChoosable: boolean;
   onClick: () => void;
   answerIsChosen: boolean;
 };
 
-const Answer = ({
-  isSelected,
-  answer,
-  isChoosable,
-  onClick,
-  answerIsChosen,
-}: Props) => {
+const Answer = ({ isSelected, answer, onClick, answerIsChosen }: Props) => {
   const isAnswerCorrect = answerIsChosen && answer.isCorrect;
   return (
     <button
       className={`${
-        isSelected && answer.isCorrect
+        isSelected && answer.isCorrect && answerIsChosen
           ? 'border-green-700 bg-transparent'
-          : isSelected && !answer.isCorrect
+          : isSelected && !answer.isCorrect && answerIsChosen
           ? 'border-red-700 bg-transparent'
           : 'border-gray-200 '
       } 
       ${
-        isChoosable &&
+        !answerIsChosen &&
         'bg-orange-200 border-orange-200 hover:bg-orange-300 hover:border-orange-300'
       }
       border-2 rounded-md px-2 py-3 w-full flex items-center justify-center`}
